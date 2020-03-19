@@ -12,14 +12,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        RxBus.instance.receiveEvent().subscribe({
+        RxBus.instance.receiveEvent("1").subscribe({
             Log.d("test", "it = $it")
             tv_main.text = it.toString()
         },{
             it.printStackTrace()
         })
 
-        RxBus.instance.sendEvent("123456")
+        RxBus.instance.receiveEvent("2").subscribe({
+            Log.d("test", "it = $it")
+            tv_main.text = it.toString()
+        },{
+            it.printStackTrace()
+        })
 
+
+        RxBus.instance.sendEvent("123456", "1")
+        RxBus.instance.sendEvent("asdfdfasfsaf", "99")
     }
 }
