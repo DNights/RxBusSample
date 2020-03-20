@@ -1,33 +1,50 @@
 package dev.dnights.rxbussample
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import dev.dnights.rxbussample.rxbus.RxBus
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        RxBus.instance.receiveEvent("1").subscribe({
-//            Log.d("test", "it = $it")
-//            tv_main.text = it.toString()
-//        },{
-//            it.printStackTrace()
-//        })
-//
-//        RxBus.instance.receiveEvent("2").subscribe({
-//            Log.d("test", "it = $it")
-//            tv_main.text = it.toString()
-//        },{
-//            it.printStackTrace()
-//        })
-//
-//
-//        RxBus.instance.sendEvent("123456", "1")
-//        RxBus.instance.sendEvent("asdfdfasfsaf", "99")
+        bt_next.setOnClickListener {
+            startActivity(Intent(this , Sub1Activity::class.java))
+        }
+
+        RxBus.instance.receiveEvent("main").subscribe({
+            Log.d("test", "sub1 = $it")
+            tv_main.text = it.toString()
+        },{
+            it.printStackTrace()
+        }).let {
+            compositeDisposable.add(it)
+        }
+
+        RxBus.instance.receiveEvent("sub1").subscribe({
+            Log.d("test", "sub1 = $it")
+            tv_sub1.text = it.toString()
+        },{
+            it.printStackTrace()
+        }).let {
+            compositeDisposable.add(it)
+        }
+
+        RxBus.instance.receiveEvent("sub2").subscribe({
+            Log.d("test", "sub2 = $it")
+            tv_sub2.text = it.toString()
+        },{
+            it.printStackTrace()
+        }).let {
+            compositeDisposable.add(it)
+        }
+
+        bt_send_main.setOnClickListener {
+            RxBus.instance.sendEvent("send event main", "main")
+        }
     }
 }
